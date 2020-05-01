@@ -1,7 +1,5 @@
 flask
 flask-cors
-tensorflow
-tflearn
 gunicorn
 nltk
 pandas
