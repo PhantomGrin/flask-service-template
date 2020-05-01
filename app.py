@@ -7,15 +7,10 @@ nltk.download('stopwords')
 nltk.download('wordnet')
 nltk.download('averaged_perceptron_tagger')
 
-from fypMain import service
+from main_logic import service
 import pandas as pd
 
-def create_app():
-    app = flask.Flask(__name__)
-    return app
-
-
-app = create_app()
+app = flask.Flask(__name__)
 CORS(app)
 
 
