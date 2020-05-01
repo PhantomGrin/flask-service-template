@@ -1,1 +1,1 @@
-web: gunicorn fypApi:app
+web:gunicorn api:app
