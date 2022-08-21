@@ -41,4 +41,6 @@ def get_products():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=8000)
+    # In development use debug=True, port=<desired-port>.
+    # Remember to remove them if you are hosting with Heroku.
+    app.run()
