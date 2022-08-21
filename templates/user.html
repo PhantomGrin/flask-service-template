@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/styles.css">
+    <title>Jinja example</title>
+</head>
+<body>
+    <h1>Jinja Template Example</h1>
+    {# This is how to put comments in Jinja templates #}
+
+    {# Rendering a literals/expressions #}
+    <p>Welcome {{ user }}</p>
+
+    <br>
+
+    <p> Example of using loops and conditions with Jinja</p>
+    {% for key, value in random_dict.items() %}
+    <li>{{ key }} : {{ value }}</li>
+    {% endfor %}
+</body>
+</html>

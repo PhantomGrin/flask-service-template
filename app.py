@@ -1,40 +1,44 @@
-import flask
-from flask import Flask, request, render_template, Response
+from flask import Flask, render_template, request, Response
+from core import get_product_list
 from flask_cors import CORS
-import nltk
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('wordnet')
-nltk.download('averaged_perceptron_tagger')
+import json
 
-from main_logic import service
-import pandas as pd
+app = Flask(__name__)
 
-app = flask.Flask(__name__)
-CORS(app)
+# Enable CORS
+# Cross-origin resource sharing is a mechanism that allows restricted resources
+# on a web page to be requested from another domain outside the domain from
+# which the first resource was served
+CORS(app=app)
 
+# 1. Rendering simple html
+# 2. Note: Method is an optional parameter
+@app.route("/", methods=["GET"])
+def welcome():
+    return render_template("index.html")
 
-@app.route("/rank", methods=['POST'])
-def predict():
-    # initialize the data dictionary that will be returned from the
-    # view
-    data = {"success": False}
+# 1. Taking parameters from path (Note: type ensuring is optional)
+# 2. Using Jinja to render htmls with dynamic input (literals and statements)
+# 3. Accessing methods from other files
+@app.route("/users/<string:username>", methods=["GET"])
+def welcome_user(username):
+    product_list = get_product_list()
+    return render_template("user.html", user=username, random_dict=product_list)
+
+# 1. Taking the data from the request
+# 2. Returning a Http Response with JSON data
+@app.route("/product", methods=["GET", "POST"])
+def get_products():
     input_json = request.json
-
+    product_list = get_product_list()
     try:
-        df = service(input_json)
-        return Response(df.to_json(orient="records"), mimetype='application/json')
-    except Exception as exc:
-        print("exception")
-        data["prediction_Exception"] = str(exc)
-        return data
-    
-
-# if this is the main thread of execution first load the model and
-@app.route("/")
-def homepage():
-    return "Hey Welcome to Rank Predictor!"
+        product_name = input_json['product_name']
+        data = {"product_name": product_name, "price": product_list[product_name], "metadata": {"status": "success"}}
+        return Response(json.dumps(data), status=200,  mimetype='application/json')
+    except:
+        data = {"product_name": product_name, "metadata": {"status": "fail", "error": "Product doesn't exist"}}
+        return Response(json.dumps(data), status=404,  mimetype='application/json')
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True, port=8000)
